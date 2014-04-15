@@ -67,33 +67,31 @@ class Screener
  
 
   def false_alarm_rate
-    # TODO ######################################
-    # Berechne die False Alarm Rate für diesen Screener.
-    #############################################
+     num_false_alarm = 0                         
+    @correct.each_with_index do |correct,i|
+      if correct == 0 && @@present[i] == 0                   
+		num_false_alarm += 1                 
+      end
+    end
     
-    return 0 # implement me!
-    
-    # END TODO ##################################
+    return num_false_alarm / @correct.count 
+        
   end
   
   def correct_rejection_rate
-    # TODO ######################################
-    # Berechne die Correct Rejection Rate für diesen Screener.
-    #############################################
+     num_correct_rejection = 0                         
+    @correct.each_with_index do |correct,i|
+      if correct == 1 && @@present[i] == 0                   
+		num_correct_rejection += 1                 
+      end
+    end
     
-    return 0 # implement me!
-    
-    # END TODO ##################################
+    return num_correct_rejection / @correct.count 
+        
   end
 
   def sensitivity
-    # TODO ######################################
-    # Berechne die Sensitivity für diesen Screener.
-    #############################################
-    
-    return 0 # implement me!
-    
-    # END TODO ##################################
+	
   end
 
   def criterion
