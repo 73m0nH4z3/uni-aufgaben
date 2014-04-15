@@ -142,13 +142,6 @@ class Classificator
     self
   end
   
-  
-  def durchschnitt
-	@screeners.each do | screener |
-		
-	end
-  end
-  
 
   def ranking
     # TODO ######################################
