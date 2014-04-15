@@ -91,17 +91,11 @@ class Screener
   end
 
   def sensitivity
-	
+	return normsinv(hit_rate) - normsinv(false_alarm_rate) 
   end
 
   def criterion
-    # TODO ######################################
-    # Berechne das Criterion für diesen Screener.
-    #############################################
-    
-    return 0 # implement me!
-    
-    # END TODO ##################################
+    return -0.5*(normsinv(false_alarm_rate) + normsinv(hit_rate)) 
   end
   
   private
