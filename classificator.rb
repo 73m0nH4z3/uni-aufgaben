@@ -39,8 +39,6 @@ class Screener
   end
 
   def hit_rate
-    # Berechne die Hit Rate für diesen Screener.
-    
     num_hits = 0                         
     @correct.each_with_index do |correct,i|
       if correct == 1 && @@present[i] == 1                   
@@ -91,7 +89,7 @@ class Screener
   end
 
   def sensitivity
-	return normsinv(hit_rate) - normsinv(false_alarm_rate) 
+    return normsinv(hit_rate) - normsinv(false_alarm_rate) 
   end
 
   def criterion
@@ -139,12 +137,30 @@ class Classificator
     @path = path
     read_data
     create_screeners
-    self
+    self end
+  
+    def average
+	avg_hit_rate = 0
+	avg_miss_rate = 0
+	avg_false_alarm_rate = 0
+	avg_correct_rejection_rate = 0
+	@screeners.each do | screener |
+		avg_hit_rate += screener.hit_rate
+		avg_miss_rate += screener.miss_rate
+		avg_false_alarm_rate += screener.false_alarm_rate
+		avg_correct_rejection_rate += screener.correct_rejection_rate
+	end
+
+	avg_hit_rate /= @screeners.count
+	avg_miss_rate  /= @screeners.count
+	avg_false_alarm_rate  /= @screeners.count
+	avg_correct_rejection_rate  /= @screeners.count
+
+	return [avg_hit_rate, avg_miss_rate, avg_false_alarm_rate, avg_correct_rejection_rate]
   end
   
 
   def ranking
-    # TODO ######################################
     # sortiere die screener nach deinen
     # selbst gewählten kriterien, so dass
     # die besten zuvorderst in der liste stehen
@@ -152,25 +168,33 @@ class Classificator
     # TIP: der operator <=> gibt -1, 0 oder 1 zurück
     # und gibt an, ob ein element kleiner, genau
     # so groß oder größer ist als das andere.
-    # 
-    #############################################
     
     return @screeners.sort do |a,b|
-      1 <=> 1 # implement me!
+      if get_argument("-s") == "a"
+        b.accuracy <=> a.accuracy
+      elsif get_argument("-s") == "h"
+        b.hit_rate <=> a.hit_rate
+	  elsif get_argument("-s") == "f"
+        b.false_alarm_rate <=> a.false_alarm_rate
+      else
+        b.sensitivity <=> a.sensitivity
+      end
+    
+ 
     end
     
-    # END TODO ##################################
   end
 
   def top_5
-    # TODO ######################################
     # hier sollen nur die besten fünf
     # screener zurückgegeben werden
-    #############################################
     
-    return ranking # implement me!
+    if get_argument("-e")
+      return ranking
+    else
+      return ranking[0..4]
+    end
     
-    # END TODO ##################################
   end
   
   private
@@ -194,6 +218,14 @@ class Classificator
   end
 end
 
+def get_argument(flag)
+  ARGV.each_with_index do |argument,i|
+    if argument == flag 
+      return ARGV[i+1]
+    end
+  end 
+  return false
+end
 
 # Output: hier muss NICHTS verändert werden!
 def fmt x; x>=0 ? ("+%0.3f" % x) : ("%0.3f" % x); end
@@ -211,7 +243,20 @@ cl.top_5.each do |screener|
   output << "  c .... criterion ............... #{fmt screener.criterion}\n"
   output << "\n"
 end
+
+# Wir machen's aber TROTZDEM
+if get_argument("-a")
+  output_average = "Average:\n"
+  output_average << "  HR ... hit rate ................ #{fmtp cl.average[0]}\n"
+  output_average << "  MR ... miss rate ............... #{fmtp cl.average[1]}\n"
+  output_average << "  FAR .. false alarm rate ........ #{fmtp cl.average[2]}\n"
+  output_average << "  CRR .. correct rejection rate .. #{fmtp cl.average[3]}\n"
+  output_average << "\n"
+  output << output_average
+end
+ 
 puts output
+
 # File.open('./output.txt', 'wb') do |f|
 #   f << output
 # end
