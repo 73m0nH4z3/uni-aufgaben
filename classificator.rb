@@ -139,14 +139,27 @@ class Classificator
     @path = path
     read_data
     create_screeners
-    self
-  end
+    self end
   
   
-  def durchschnitt
+  def average
+	avg_hit_rate = 0
+	avg_miss_rate = 0
+	avg_false_alarm_rate = 0
+	avg_correct_rejection_rate = 0
 	@screeners.each do | screener |
-		
+		avg_hit_rate += screener.hit_rate
+		avg_miss_rate += screener.miss_rate
+		avg_false_alarm_rate += screener.false_alarm_rate
+		avg_correct_rejection_rate += screener.correct_rejection_rate
 	end
+
+	avg_hit_rate /= @screeners.count
+	avg_miss_rate  /= @screeners.count
+	avg_false_alarm_rate  /= @screeners.count
+	avg_correct_rejection_rate  /= @screeners.count
+
+	return [avg_hit_rate, avg_miss_rate, avg_false_alarm_rate, avg_correct_rejection_rate]
   end
   
 
@@ -219,6 +232,14 @@ cl.top_5.each do |screener|
   output << "\n"
 end
 puts output
+
+output_average = "Average:\n"
+  output_average << "  HR ... hit rate ................ #{fmtp cl.average[0]}\n"
+  output_average << "  MR ... miss rate ............... #{fmtp cl.average[1]}\n"
+  output_average << "  FAR .. false alarm rate ........ #{fmtp cl.average[2]}\n"
+  output_average << "  CRR .. correct rejection rate .. #{fmtp cl.average[3]}\n"
+puts output_average
+ 
 # File.open('./output.txt', 'wb') do |f|
 #   f << output
 # end
