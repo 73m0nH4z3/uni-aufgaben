@@ -95,9 +95,11 @@ class Screener
   end
 
   def criterion
-    return -0.5*(normsinv(false_alarm_rate) + normsinv(hit_rate)) 
+    return (-0.5*(normsinv(false_alarm_rate) + normsinv(hit_rate))) 
   end
   
+  
+
   private
   
   # Signum-Funktion
@@ -139,6 +141,14 @@ class Classificator
     create_screeners
     self
   end
+  
+  
+  def durchschnitt
+	@screeners.each do | screener |
+		
+	end
+  end
+  
 
   def ranking
     # TODO ######################################
