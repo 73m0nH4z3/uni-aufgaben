@@ -43,10 +43,8 @@ class Screener
     
     num_hits = 0                         
     @correct.each_with_index do |correct,i|
-      if correct == 1                     
-	if present == 1
-		num_hits += 1                 
-	end
+      if correct == 1 && @@present[i] == 1                   
+	num_hits += 1                 
       end
     end
     
@@ -218,5 +216,4 @@ puts output
 # File.open('./output.txt', 'wb') do |f|
 #   f << output
 # end
-
 
