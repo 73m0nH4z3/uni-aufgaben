@@ -39,12 +39,19 @@ class Screener
   end
 
   def hit_rate
-    # TODO ######################################
     # Berechne die Hit Rate für diesen Screener.
     
-    return 0 # implement me!
+    num_hits = 0                         
+    @correct.each_with_index do |correct,i|
+      if correct == 1                     
+	if present == 1
+		num_hits += 1                 
+	end
+      end
+    end
+    
+    return num_hits / @correct.count 
         
-    # END TODO ##################################
   end
   
   def miss_rate
