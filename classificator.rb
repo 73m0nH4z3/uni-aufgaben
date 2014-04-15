@@ -53,14 +53,18 @@ class Screener
   end
   
   def miss_rate
-    # TODO ######################################
-    # Berechne die Miss Rate für diesen Screener.
-    #############################################
+     num_miss = 0                         
+    @correct.each_with_index do |correct,i|
+      if correct == 0 && @@present[i] == 1                   
+		num_miss += 1                 
+      end
+    end
     
-    return 0 # implement me!
-    
-    # END TODO ##################################
+    return num_miss / @correct.count 
+        
   end
+
+ 
 
   def false_alarm_rate
     # TODO ######################################
